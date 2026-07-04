@@ -10,12 +10,12 @@ import personajes.personaje;
  *
  * @author Jordann
  */
-public class ataqueNormal extends atacar {
+public class ataqueNormal {
     
-    public void atacar(personaje enemigo){
-        int danioTotal ;
-        enemigo.vida -= danioTotal;
-
+    public void ejecutar(personaje enemigo, int danioTotal, String mensajeAccion) {
+        System.out.println(mensajeAccion);
+        enemigo.setVida(enemigo.getVida() - danioTotal);
+        System.out.println("  Daño causado: " + danioTotal);
     }
     
 }
