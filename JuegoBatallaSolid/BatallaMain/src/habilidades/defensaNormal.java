@@ -9,5 +9,7 @@ package habilidades;
  * @author Jordann
  */
 public class defensaNormal {
-    
+    public void ejecutar(String mensajeAccion) {
+        System.out.println(mensajeAccion);
+    }
 }

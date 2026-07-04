@@ -1,5 +1,10 @@
 package personajes;
 
+import habilidades.ataqueNormal;
+import habilidades.defensaNormal;
+import habilidades.habilidad;
+import inventario.Objeto;
+import inventario.armadura;
 import java.util.ArrayList;
 
 public class arquero extends personaje {
@@ -8,12 +13,17 @@ public class arquero extends personaje {
     private ArrayList<Objeto> inventario;
     private Objeto objetoEquipado;
 
+    private final ataqueNormal accionAtaque = new ataqueNormal();
+    private final defensaNormal accionDefensa = new defensaNormal();
+    private final infoPersonaje info = new infoPersonaje();
+ 
     public arquero(String nombre, String id, int vida, int experiencia, habilidad habilidadEspecial) {
         super(nombre, id, vida, experiencia, habilidadEspecial);
         this.precision = 10;
         this.inventario = new ArrayList<>();
         this.objetoEquipado = null;
     }
+ 
 
     // NUEVO: agrega un objeto al inventario
     public void agregarObjeto(Objeto o) {
@@ -34,37 +44,37 @@ public class arquero extends personaje {
     @Override
     public void atacar(personaje enemigo) {
         int danioTotal = precision;
-
+        String mensaje;
+ 
         if (objetoEquipado instanceof arma) {
             danioTotal += objetoEquipado.getModificador();
-            System.out.println(nombre + " dispara una flecha con " + objetoEquipado.getNombre());
+            mensaje = nombre + " dispara una flecha con " + objetoEquipado.getNombre();
         } else {
-            System.out.println(nombre + " dispara una flecha.");
+            mensaje = nombre + " dispara una flecha.";
         }
-
-        enemigo.vida -= danioTotal;
-        System.out.println("  Daño causado: " + danioTotal);
+ 
+        accionAtaque.ejecutar(enemigo, danioTotal, mensaje);
     }
-
+ 
     @Override
     public void defender() {
+        String mensaje;
+ 
         if (objetoEquipado instanceof armadura) {
-            System.out.println(nombre + " esquiva el ataque con agilidad gracias a "
+            mensaje = nombre + " esquiva el ataque con agilidad gracias a "
                     + objetoEquipado.getNombre()
-                    + " (reduce " + objetoEquipado.getModificador() + " de daño)");
+                    + " (reduce " + objetoEquipado.getModificador() + " de daño)";
         } else {
-            System.out.println(nombre + " esquiva el ataque.");
+            mensaje = nombre + " esquiva el ataque.";
         }
+ 
+        accionDefensa.ejecutar(mensaje);
     }
-
+ 
     @Override
     public void mostrarInfo() {
-        System.out.println("ARQUERO");
-        System.out.println("Nombre: " + nombre);
-        System.out.println("ID: " + id);
-        System.out.println("Vida: " + vida);
-        System.out.println("Experiencia: " + experiencia);
-
+        info.mostrarDatosBase(this, "ARQUERO");
+ 
         System.out.println("Inventario (" + inventario.size() + " objeto/s):");
         if (inventario.isEmpty()) {
             System.out.println("  (vacío)");
@@ -73,11 +83,11 @@ public class arquero extends personaje {
                 o.descripcion();
             }
         }
-
+ 
         System.out.println("Equipado: "
                 + (objetoEquipado != null ? objetoEquipado.getNombre() : "Ninguno"));
     }
-
+ 
     @Override
     public void subNivel() {
         nivel += 1;

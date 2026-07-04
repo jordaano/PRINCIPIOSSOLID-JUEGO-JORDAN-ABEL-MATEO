@@ -1,13 +1,24 @@
 package personajes;
 
+import habilidades.ataqueNormal;
+import habilidades.defensaNormal;
+import habilidades.habilidad;
+import inventario.Objeto;
+import inventario.arma;
+import inventario.armadura;
 import java.util.ArrayList;
+
 
 public class guerrero extends personaje {
 
     private int fuerza;
     private ArrayList<Objeto> inventario;
     private Objeto objetoEquipado;
-
+    
+    private final ataqueNormal accionAtaque = new ataqueNormal();
+    private final defensaNormal accionDefensa = new defensaNormal();
+    private final infoPersonaje info = new infoPersonaje();
+    
     public guerrero(String nombre, String id, int vida, int experiencia, habilidad habilidadEspecial) {
         super(nombre, id, vida, experiencia, habilidadEspecial);
         this.fuerza = 15;
@@ -34,37 +45,38 @@ public class guerrero extends personaje {
     @Override
     public void atacar(personaje enemigo) {
         int danioTotal = fuerza;
-
+        String mensaje;
+ 
         if (objetoEquipado instanceof arma) {
             danioTotal += objetoEquipado.getModificador();
-            System.out.println(nombre + " ataca con espada y " + objetoEquipado.getNombre());
+            mensaje = nombre + " ataca con espada y " + objetoEquipado.getNombre();
         } else {
-            System.out.println(nombre + " ataca con espada");
+            mensaje = nombre + " ataca con espada";
         }
-
-        enemigo.vida -= danioTotal;
-        System.out.println("  Daño causado: " + danioTotal);
+        accionAtaque.ejecutar(enemigo, danioTotal, mensaje);
     }
 
-    @Override
-    public void defender() {
-        if (objetoEquipado instanceof armadura) {
-            System.out.println(nombre + " bloquea con escudo y "
-                    + objetoEquipado.getNombre()
-                    + " (reduce " + objetoEquipado.getModificador() + " de daño)");
-        } else {
-            System.out.println(nombre + " bloquea con escudo.");
+        @Override
+        public void defender() {
+            String mensaje;
+
+            if (objetoEquipado instanceof armadura) {
+                mensaje = nombre + " bloquea con escudo y "
+                        + objetoEquipado.getNombre()
+                        + " (reduce " + objetoEquipado.getModificador() + " de daño)";
+            } else {
+                mensaje = nombre + " bloquea con escudo.";
+            }
+
+            accionDefensa.ejecutar(mensaje);
         }
-    }
+    
 
     @Override
     public void mostrarInfo() {
-        System.out.println("GUERRERO");
-        System.out.println("Nombre: " + nombre);
-        System.out.println("ID: " + id);
-        System.out.println("Vida: " + vida);
-        System.out.println("Experiencia: " + experiencia);
-
+        info.mostrarDatosBase(this, "GUERRERO");
+ 
+        // Parte propia del guerrero: inventario y equipamiento
         System.out.println("Inventario (" + inventario.size() + " objeto/s):");
         if (inventario.isEmpty()) {
             System.out.println("  (vacío)");
@@ -73,6 +85,9 @@ public class guerrero extends personaje {
                 o.descripcion();
             }
         }
+ 
+        System.out.println("Equipado: "
+                + (objetoEquipado != null ? objetoEquipado.getNombre() : "Ninguno"));
 
         System.out.println("Equipado: "
                 + (objetoEquipado != null ? objetoEquipado.getNombre() : "Ninguno"));
