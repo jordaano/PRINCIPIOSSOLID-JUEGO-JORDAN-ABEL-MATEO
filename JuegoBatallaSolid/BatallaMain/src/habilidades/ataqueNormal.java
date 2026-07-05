@@ -10,7 +10,7 @@ import personajes.personaje;
  *
  * @author Jordann
  */
-public class ataqueNormal {
+public class ataqueNormal implements IAtaque {
     
     public void ejecutar(personaje enemigo, int danioTotal, String mensajeAccion) {
         System.out.println(mensajeAccion);

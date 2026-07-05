@@ -1,30 +1,34 @@
 package personajes;
 
 import habilidades.habilidad;
-import habilidades.sinEnergiaException;
+import habilidades.SinEnergiaException;
 
+/**
+ * Clase base para todos los personajes del juego.
+ */
 public abstract class personaje {
 
-    protected String nombre;
-    protected String id;
-    protected int vida;
-    protected int experiencia;
-    protected int nivel;
-    protected int energia;
-    protected habilidad habilidadEspecial;
+    private static final int ENERGIA_INICIAL = 100;
 
-    
+    private String nombre;
+    private final String id;
+    private int vida;
+    private int experiencia;
+    private int nivel;
+    private int energia;
+    private habilidad habilidadEspecial;
 
-    public personaje(String nombre, String id, int vida, int experiencia,habilidad habilidadEspecial) {
+    public personaje(String nombre, String id, int vida, int experiencia,
+            habilidad habilidadEspecial) {
+
         this.nombre = nombre;
         this.id = id;
         this.vida = vida;
         this.experiencia = experiencia;
         this.nivel = 1;
-        this.energia = 100;
+        this.energia = ENERGIA_INICIAL;
         this.habilidadEspecial = habilidadEspecial;
     }
-    
 
     public String getNombre() {
         return nombre;
@@ -38,16 +42,12 @@ public abstract class personaje {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public int getVida() {
         return vida;
     }
 
     public void setVida(int vida) {
-        this.vida = vida;
+        this.vida = Math.max(0, vida);
     }
 
     public int getExperiencia() {
@@ -55,7 +55,7 @@ public abstract class personaje {
     }
 
     public void setExperiencia(int experiencia) {
-        this.experiencia = experiencia;
+        this.experiencia = Math.max(0, experiencia);
     }
 
     public int getNivel() {
@@ -63,7 +63,7 @@ public abstract class personaje {
     }
 
     public void setNivel(int nivel) {
-        this.nivel = nivel;
+        this.nivel = Math.max(1, nivel);
     }
 
     public int getEnergia() {
@@ -71,35 +71,51 @@ public abstract class personaje {
     }
 
     public void setEnergia(int energia) {
-        this.energia = energia;
+        this.energia = Math.max(0, energia);
     }
 
     public habilidad getHabilidadEspecial() {
         return habilidadEspecial;
     }
 
-    public boolean usarHabilidadEspecial(habilidad hab, personaje enemigo) throws sinEnergiaException {
-        if (energia < hab.getCostoEnergia()) {
-            throw new sinEnergiaException(nombre + " no tiene suficiente energía. Requiere " + hab.getCostoEnergia() + " de energía.");
-        }
-
-        if (!hab.verificarAtaqueDisp()) {
-            System.out.println("¡La habilidad [" + hab.getNombre() + "] está en cooldown! Faltan " + hab.getCooldownAct() + " turnos.");
-            return false; // No se pudo usar, no pasa el turno
-        }
-
-        // Si tiene energía y no está en cooldown, se ejecuta
-        energia -= hab.getCostoEnergia();
-        hab.ataqueEspecial(this, enemigo);
-        hab.setCooldownAct(hab.getCooldown()); // Se activa el cooldown
-        return true; // Éxito
+    public void setHabilidadEspecial(habilidad habilidadEspecial) {
+        this.habilidadEspecial = habilidadEspecial;
     }
 
-    public abstract void atacar(personaje enemigo);
+    public boolean usarHabilidadEspecial(Personaje enemigo)
+            throws SinEnergiaException {
+
+        if (energia < habilidadEspecial.getCostoEnergia()) {
+            throw new SinEnergiaException(
+                    nombre + " no tiene suficiente energía. Requiere "
+                    + habilidadEspecial.getCostoEnergia() + " de energía.");
+        }
+
+        if (!habilidadEspecial.verificarAtaqueDisp()) {
+
+            System.out.println("La habilidad "
+                    + habilidadEspecial.getNombre()
+                    + " está en cooldown. Faltan "
+                    + habilidadEspecial.getCooldownAct()
+                    + " turnos.");
+
+            return false;
+        }
+
+        energia -= habilidadEspecial.getCostoEnergia();
+
+        habilidadEspecial.ataqueEspecial(this, enemigo);
+
+        habilidadEspecial.setCooldownAct(habilidadEspecial.getCooldown());
+
+        return true;
+    }
+
+    public abstract void atacar(Personaje enemigo);
 
     public abstract void defender();
 
-    public abstract void subNivel();
+    public abstract void subirNivel();
 
     public abstract void mostrarInfo();
 
