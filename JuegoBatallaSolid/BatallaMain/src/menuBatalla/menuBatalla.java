@@ -9,6 +9,8 @@ import habilidades.ataqueCritico;
 import habilidades.hechizoEspecial;
 import habilidades.tiroCertero;
 import habilidades.sinEnergiaException;
+import inventario.arma;
+import inventario.armadura;
 
 public class menuBatalla {
 
@@ -23,7 +25,6 @@ public class menuBatalla {
         personaje[] listaPersonajes = new personaje[n];
 
         for (int i = 0; i < n; i++) {
-
             System.out.println("\nPersonaje " + (i + 1));
             System.out.println("1. Guerrero");
             System.out.println("2. Mago");
@@ -33,55 +34,42 @@ public class menuBatalla {
 
             System.out.print("Nombre: ");
             String nombre = sc.nextLine();
-
             System.out.print("ID: ");
             String id = sc.nextLine();
-
             System.out.print("Vida: ");
             int vida = sc.nextInt();
-
             System.out.print("Experiencia: ");
             int experiencia = sc.nextInt();
             sc.nextLine();
 
             switch (opcion) {
                 case 1:
-                    // Se crea el guerrero incluyendo su habilidad especial
                     guerrero g = new guerrero(nombre, id, vida, experiencia, new ataqueCritico());
-                    // Asignación automática de inventario
-                    /*arma espadaLarga = new arma("Espada Larga", 10, "Cortante");
+                    arma espadaLarga = new arma("Espada Larga", 10, "Cortante");
                     armadura cota = new armadura("Cota de Malla", 8, "Física");
                     g.agregarObjeto(espadaLarga);
                     g.agregarObjeto(cota);
-                    g.equipar(espadaLarga); // equipa el arma por defecto
-                     */
+                    g.equipar(espadaLarga);
                     listaPersonajes[i] = g;
                     break;
-
                 case 2:
-                    // Se crea el mago incluyendo su habilidad especial
                     mago m = new mago(nombre, id, vida, experiencia, new hechizoEspecial());
-                    /*arma bastón = new arma("Bastón Arcano", 12, "Mágico");
-                    armadura robesMágicas = new armadura("Robes Mágicas", 5, "Mágica");
-                    m.agregarObjeto(bastón);
-                    m.agregarObjeto(robesMágicas);
-                    m.equipar(bastón);
-                     */
+                    arma baston = new arma("Bastón Arcano", 12, "Mágico");
+                    armadura robesMagicas = new armadura("Robes Mágicas", 5, "Mágica");
+                    m.agregarObjeto(baston);
+                    m.agregarObjeto(robesMagicas);
+                    m.equipar(baston);
                     listaPersonajes[i] = m;
                     break;
-
                 case 3:
-                    // Se crea el arquero incluyendo su habilidad especial
                     arquero a = new arquero(nombre, id, vida, experiencia, new tiroCertero());
-                    /*arma arcoElfo = new arma("Arco Élfico", 8, "Perforante");
+                    arma arcoElfo = new arma("Arco Élfico", 8, "Perforante");
                     armadura cuero = new armadura("Armadura de Cuero", 4, "Ligera");
                     a.agregarObjeto(arcoElfo);
                     a.agregarObjeto(cuero);
                     a.equipar(arcoElfo);
-                     */
                     listaPersonajes[i] = a;
                     break;
-
                 default:
                     System.out.println("Opción inválida");
                     i--;
@@ -108,28 +96,19 @@ public class menuBatalla {
 
         System.out.println("\n===== INICIA LA BATALLA =====");
 
-        // Bucle principal por turnos interactivos
         while (luchador1.getVida() > 0 && luchador2.getVida() > 0) {
-
-            // --- TURNO DEL LUCHADOR 1 ---
-            luchador1.getHabilidadEspecial().reducirCooldown(); // El CD baja al iniciar el turno
+            luchador1.getHabilidadEspecial().reducirCooldown();
             ejecutarTurnoMenu(luchador1, luchador2, sc);
-
             System.out.println("\n-> STATUS: " + luchador2.getNombre() + " se queda con " + luchador2.getVida() + " PS.\n");
-
             if (luchador2.getVida() <= 0) {
-                break; // Si muere el jugador 2, la batalla termina inmediatamente
+                break;
             }
-
-            // --- TURNO DEL LUCHADOR 2 ---
-            luchador2.getHabilidadEspecial().reducirCooldown(); // El CD baja al iniciar el turno
+            luchador2.getHabilidadEspecial().reducirCooldown();
             ejecutarTurnoMenu(luchador2, luchador1, sc);
-
             System.out.println("\n-> STATUS: " + luchador1.getNombre() + " se queda con " + luchador1.getVida() + " PS.\n");
         }
 
         System.out.println("\n===== RESULTADO =====");
-
         if (luchador1.getVida() > 0) {
             System.out.println("Ganador: " + luchador1.getNombre());
             luchador1.subNivel();
@@ -138,9 +117,6 @@ public class menuBatalla {
             luchador2.subNivel();
         }
     }
-
-
- 
 
     private void ejecutarTurnoMenu(personaje atacante, personaje enemigo, Scanner sc) {
         boolean accionRealizada = false;
@@ -158,36 +134,30 @@ public class menuBatalla {
             System.out.print("Seleccione su acción (1-3): ");
 
             int opcionAccion = sc.nextInt();
-            System.out.println(); // Espacio estético
+            System.out.println();
 
             switch (opcionAccion) {
                 case 1:
                     atacante.atacar(enemigo);
-                    accionRealizada = true; // Turno completado con éxito
+                    accionRealizada = true;
                     break;
-
                 case 2:
                     atacante.defender();
                     accionRealizada = true;
                     break;
-
                 case 3:
                     try {
-                        // El método usarHabilidadEspecial devuelve true si se pudo usar, o false si está en CD
                         boolean exitoHabilidad = atacante.usarHabilidadEspecial(atacante.getHabilidadEspecial(), enemigo);
-
                         if (exitoHabilidad) {
-                            accionRealizada = true; // Ataque especial ejecutado correctamente
+                            accionRealizada = true;
                         } else {
                             System.out.println("Intenta con otra opción.");
                         }
                     } catch (sinEnergiaException e) {
-                        // Captura el error de falta de energía. No rompe el juego, te regresa al menú.
                         System.out.println("¡ERROR! " + e.getMessage());
                         System.out.println("Elige una acción que no requiera tanta energía.");
                     }
                     break;
-
                 default:
                     System.out.println("¡Opción inválida! Por favor, selecciona 1, 2 o 3.");
                     break;
@@ -195,4 +165,3 @@ public class menuBatalla {
         }
     }
 }
-
