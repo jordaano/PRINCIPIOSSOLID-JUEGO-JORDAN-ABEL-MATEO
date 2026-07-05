@@ -1,11 +1,8 @@
 package personajes;
 
 import habilidades.habilidad;
-import habilidades.SinEnergiaException;
+import habilidades.sinEnergiaException;
 
-/**
- * Clase base para todos los personajes del juego.
- */
 public abstract class personaje {
     protected String nombre;
     protected String id;
@@ -21,7 +18,7 @@ public abstract class personaje {
         this.vida = vida;
         this.experiencia = experiencia;
         this.nivel = 1;
-        this.energia = ENERGIA_INICIAL;
+        this.energia = 100;
         this.habilidadEspecial = habilidadEspecial;
     }
 
@@ -39,17 +36,9 @@ public abstract class personaje {
     public void setEnergia(int energia) { this.energia = energia; }
     public habilidad getHabilidadEspecial() { return habilidadEspecial; }
 
-    public void setHabilidadEspecial(habilidad habilidadEspecial) {
-        this.habilidadEspecial = habilidadEspecial;
-    }
-
-    public boolean usarHabilidadEspecial(Personaje enemigo)
-            throws SinEnergiaException {
-
-        if (energia < habilidadEspecial.getCostoEnergia()) {
-            throw new SinEnergiaException(
-                    nombre + " no tiene suficiente energía. Requiere "
-                    + habilidadEspecial.getCostoEnergia() + " de energía.");
+    public boolean usarHabilidadEspecial(habilidad hab, personaje enemigo) throws sinEnergiaException {
+        if (energia < hab.getCostoEnergia()) {
+            throw new sinEnergiaException(nombre + " no tiene suficiente energía. Requiere " + hab.getCostoEnergia() + " de energía.");
         }
         if (!hab.verificarAtaqueDisp()) {
             System.out.println("¡La habilidad [" + hab.getNombre() + "] está en cooldown! Faltan " + hab.getCooldownAct() + " turnos.");
