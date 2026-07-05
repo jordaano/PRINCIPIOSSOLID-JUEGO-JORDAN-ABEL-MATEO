@@ -44,11 +44,11 @@ public class guerrero extends personaje {
 
     @Override
     public void atacar(personaje enemigo) {
-        int danioTotal = fuerza;
+        int modAtaque = (objetoEquipado != null) ? objetoEquipado.getModificadorAtaque() : 0;
+        int danioTotal = fuerza + modAtaque;
         String mensaje;
- 
-        if (objetoEquipado instanceof arma) {
-            danioTotal += objetoEquipado.getModificador();
+
+        if (modAtaque > 0) {
             mensaje = nombre + " ataca con espada y " + objetoEquipado.getNombre();
         } else {
             mensaje = nombre + " ataca con espada";
@@ -56,20 +56,21 @@ public class guerrero extends personaje {
         accionAtaque.ejecutar(enemigo, danioTotal, mensaje);
     }
 
-        @Override
-        public void defender() {
-            String mensaje;
+    @Override
+    public void defender() {
+        int modDefensa = (objetoEquipado != null) ? objetoEquipado.getModificadorDefensa() : 0;
+        String mensaje;
 
-            if (objetoEquipado instanceof armadura) {
-                mensaje = nombre + " bloquea con escudo y "
-                        + objetoEquipado.getNombre()
-                        + " (reduce " + objetoEquipado.getModificador() + " de daño)";
-            } else {
-                mensaje = nombre + " bloquea con escudo.";
-            }
-
-            accionDefensa.ejecutar(mensaje);
+        if (modDefensa > 0) {
+            mensaje = nombre + " bloquea con escudo y "
+                    + objetoEquipado.getNombre()
+                    + " (reduce " + modDefensa + " de daño)";
+        } else {
+            mensaje = nombre + " bloquea con escudo.";
         }
+
+        accionDefensa.ejecutar(mensaje);
+    }
     
 
     @Override
