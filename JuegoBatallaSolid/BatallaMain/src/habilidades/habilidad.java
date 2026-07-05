@@ -1,7 +1,6 @@
-    package habilidades;
+package habilidades;
 
 import personajes.personaje;
-
 
 public abstract class habilidad {
     protected String nombre;
@@ -16,35 +15,28 @@ public abstract class habilidad {
         this.cooldownAct = cooldownAct;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getNombre() { 
+        return nombre; 
     }
-
-    public void setNombre(String nombre) {
+    public void setNombre(String nombre) { 
         this.nombre = nombre;
     }
-
-    public int getCostoEnergia() {
+    public int getCostoEnergia() { 
         return costoEnergia;
     }
-
-    public void setCostoEnergia(int costoEnergia) {
+    public void setCostoEnergia(int costoEnergia) { 
         this.costoEnergia = costoEnergia;
     }
-
-    public int getCooldown() {
-        return cooldown;
+    public int getCooldown() { 
+        return cooldown; 
     }
-
     public void setCooldown(int cooldown) {
         this.cooldown = cooldown;
     }
-
-    public int getCooldownAct() {
+    public int getCooldownAct() { 
         return cooldownAct;
     }
-
-    public void setCooldownAct(int cooldownAct) {
+    public void setCooldownAct(int cooldownAct) { 
         this.cooldownAct = cooldownAct;
     }
 
@@ -53,18 +45,20 @@ public abstract class habilidad {
             cooldownAct--;
         }
     }
-    
-     public boolean verificarAtaqueDisp() {
+
+    public boolean verificarAtaqueDisp() {
         return cooldownAct == 0;
     }
-     public void ataqueEspecial(personaje usuario, personaje enemigo){
-         int dano = usuario.getPoderEspecial() * getMultiplicadorDanio();
-         System.out.println("¡" + usuario.getNombre() + " " + getMensajeUso() + ": " + nombre + "!");
+
+    // Método plantilla (Template Method): define el esqueleto del ataque especial.
+    // Los pasos variables (multiplicador y mensaje) los definen las subclases.
+    public final void ataqueEspecial(personaje usuario, personaje enemigo) {
+        int dano = usuario.getPoderEspecial() * getMultiplicadorDanio();
+        System.out.println("¡" + usuario.getNombre() + " " + getMensajeUso() + ": " + nombre + "!");
         enemigo.setVida(enemigo.getVida() - dano);
         this.setCooldownAct(this.getCooldown());
-     }
-     protected abstract int getMultiplicadorDanio();
-     protected abstract String getMensajeUso(); 
+    }
+
+    protected abstract int getMultiplicadorDanio();
+    protected abstract String getMensajeUso();
 }
-
-

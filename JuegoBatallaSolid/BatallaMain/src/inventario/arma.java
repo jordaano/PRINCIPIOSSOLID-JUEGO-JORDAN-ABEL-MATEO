@@ -5,7 +5,7 @@ package inventario;
  * Hereda de Objeto y sobrescribe getModificadorAtaque() para proveer daño adicional.
  */
 public class arma extends Objeto {
-    private String tipoDano; // Ej: "Cortante", "Mágico", "Perforante"
+    private String tipoDano;
 
     public arma(String nombre, int modificador, String tipoDano) {
         super(nombre, modificador);

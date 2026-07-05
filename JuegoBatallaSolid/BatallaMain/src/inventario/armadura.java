@@ -5,7 +5,7 @@ package inventario;
  * Hereda de Objeto y sobrescribe getModificadorDefensa() para proveer reducción de daño.
  */
 public class armadura extends Objeto {
-    private String tipoDefensa; // Ej: "Física", "Mágica", "Ligera"
+    private String tipoDefensa;
 
     public armadura(String nombre, int modificador, String tipoDefensa) {
         super(nombre, modificador);

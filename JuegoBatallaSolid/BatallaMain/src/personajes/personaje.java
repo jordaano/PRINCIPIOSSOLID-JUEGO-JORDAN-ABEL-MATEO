@@ -7,20 +7,15 @@ import habilidades.SinEnergiaException;
  * Clase base para todos los personajes del juego.
  */
 public abstract class personaje {
+    protected String nombre;
+    protected String id;
+    protected int vida;
+    protected int experiencia;
+    protected int nivel;
+    protected int energia;
+    protected habilidad habilidadEspecial;
 
-    private static final int ENERGIA_INICIAL = 100;
-
-    private String nombre;
-    private final String id;
-    private int vida;
-    private int experiencia;
-    private int nivel;
-    private int energia;
-    private habilidad habilidadEspecial;
-
-    public personaje(String nombre, String id, int vida, int experiencia,
-            habilidad habilidadEspecial) {
-
+    public personaje(String nombre, String id, int vida, int experiencia, habilidad habilidadEspecial) {
         this.nombre = nombre;
         this.id = id;
         this.vida = vida;
@@ -30,53 +25,19 @@ public abstract class personaje {
         this.habilidadEspecial = habilidadEspecial;
     }
 
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public int getVida() {
-        return vida;
-    }
-
-    public void setVida(int vida) {
-        this.vida = Math.max(0, vida);
-    }
-
-    public int getExperiencia() {
-        return experiencia;
-    }
-
-    public void setExperiencia(int experiencia) {
-        this.experiencia = Math.max(0, experiencia);
-    }
-
-    public int getNivel() {
-        return nivel;
-    }
-
-    public void setNivel(int nivel) {
-        this.nivel = Math.max(1, nivel);
-    }
-
-    public int getEnergia() {
-        return energia;
-    }
-
-    public void setEnergia(int energia) {
-        this.energia = Math.max(0, energia);
-    }
-
-    public habilidad getHabilidadEspecial() {
-        return habilidadEspecial;
-    }
+    public String getNombre() { return nombre; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
+    public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
+    public int getVida() { return vida; }
+    public void setVida(int vida) { this.vida = vida; }
+    public int getExperiencia() { return experiencia; }
+    public void setExperiencia(int experiencia) { this.experiencia = experiencia; }
+    public int getNivel() { return nivel; }
+    public void setNivel(int nivel) { this.nivel = nivel; }
+    public int getEnergia() { return energia; }
+    public void setEnergia(int energia) { this.energia = energia; }
+    public habilidad getHabilidadEspecial() { return habilidadEspecial; }
 
     public void setHabilidadEspecial(habilidad habilidadEspecial) {
         this.habilidadEspecial = habilidadEspecial;
@@ -90,35 +51,19 @@ public abstract class personaje {
                     nombre + " no tiene suficiente energía. Requiere "
                     + habilidadEspecial.getCostoEnergia() + " de energía.");
         }
-
-        if (!habilidadEspecial.verificarAtaqueDisp()) {
-
-            System.out.println("La habilidad "
-                    + habilidadEspecial.getNombre()
-                    + " está en cooldown. Faltan "
-                    + habilidadEspecial.getCooldownAct()
-                    + " turnos.");
-
+        if (!hab.verificarAtaqueDisp()) {
+            System.out.println("¡La habilidad [" + hab.getNombre() + "] está en cooldown! Faltan " + hab.getCooldownAct() + " turnos.");
             return false;
         }
-
-        energia -= habilidadEspecial.getCostoEnergia();
-
-        habilidadEspecial.ataqueEspecial(this, enemigo);
-
-        habilidadEspecial.setCooldownAct(habilidadEspecial.getCooldown());
-
+        energia -= hab.getCostoEnergia();
+        hab.ataqueEspecial(this, enemigo);
+        hab.setCooldownAct(hab.getCooldown());
         return true;
     }
 
-    public abstract void atacar(Personaje enemigo);
-
+    public abstract void atacar(personaje enemigo);
     public abstract void defender();
-
-    public abstract void subirNivel();
-
+    public abstract void subNivel();
     public abstract void mostrarInfo();
-
     public abstract int getPoderEspecial();
-
 }

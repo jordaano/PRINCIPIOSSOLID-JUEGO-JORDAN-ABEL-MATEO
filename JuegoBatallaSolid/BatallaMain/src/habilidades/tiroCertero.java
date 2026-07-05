@@ -2,9 +2,9 @@ package habilidades;
 
 public class tiroCertero extends habilidad {
 
-    public tiroCertero() { 
-        // Nombre, Costo de Energía, Cooldown Máximo (1 turno), Cooldown Inicial (0 = Disponible)
-        super("Tiro Certero", 15, 1, 0);
+    public tiroCertero() {
+        // Nombre, Costo de Energía, Cooldown Máximo (2 turnos), Cooldown Inicial (0 = Disponible)
+        super("Tiro Certero", 15, 2, 0);
     }
 
     @Override
@@ -14,7 +14,6 @@ public class tiroCertero extends habilidad {
 
     @Override
     protected String getMensajeUso() {
-        return "usa su habilidad especial";
+        return "apunta y dispara su habilidad especial";
     }
-
 }
