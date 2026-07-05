@@ -42,32 +42,33 @@ public class mago extends personaje {
     }
 
     @Override
-   public void atacar(personaje enemigo) {
-        int danioTotal = magia;
+    public void atacar(personaje enemigo) {
+        int modAtaque = (objetoEquipado != null) ? objetoEquipado.getModificadorAtaque() : 0;
+        int danioTotal = magia + modAtaque;
         String mensaje;
- 
-        if (objetoEquipado instanceof arma) {
-            danioTotal += objetoEquipado.getModificador();
+
+        if (modAtaque > 0) {
             mensaje = nombre + " lanza un hechizo potenciado con " + objetoEquipado.getNombre();
         } else {
             mensaje = nombre + " lanza un hechizo.";
         }
- 
+
         accionAtaque.ejecutar(enemigo, danioTotal, mensaje);
     }
- 
+
     @Override
     public void defender() {
+        int modDefensa = (objetoEquipado != null) ? objetoEquipado.getModificadorDefensa() : 0;
         String mensaje;
- 
-        if (objetoEquipado instanceof armadura) {
+
+        if (modDefensa > 0) {
             mensaje = nombre + " crea un escudo mágico reforzado con "
                     + objetoEquipado.getNombre()
-                    + " (reduce " + objetoEquipado.getModificador() + " de daño)";
+                    + " (reduce " + modDefensa + " de daño)";
         } else {
             mensaje = nombre + " crea un escudo mágico.";
         }
- 
+
         accionDefensa.ejecutar(mensaje);
     }
  

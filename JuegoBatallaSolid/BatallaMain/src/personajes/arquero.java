@@ -43,11 +43,11 @@ public class arquero extends personaje {
 
     @Override
     public void atacar(personaje enemigo) {
-        int danioTotal = precision;
+        int modAtaque = (objetoEquipado != null) ? objetoEquipado.getModificadorAtaque() : 0;
+        int danioTotal = precision + modAtaque;
         String mensaje;
  
-        if (objetoEquipado instanceof arma) {
-            danioTotal += objetoEquipado.getModificador();
+        if (modAtaque > 0) {
             mensaje = nombre + " dispara una flecha con " + objetoEquipado.getNombre();
         } else {
             mensaje = nombre + " dispara una flecha.";
@@ -58,12 +58,13 @@ public class arquero extends personaje {
  
     @Override
     public void defender() {
+        int modDefensa = (objetoEquipado != null) ? objetoEquipado.getModificadorDefensa() : 0;
         String mensaje;
  
-        if (objetoEquipado instanceof armadura) {
+        if (modDefensa > 0) {
             mensaje = nombre + " esquiva el ataque con agilidad gracias a "
                     + objetoEquipado.getNombre()
-                    + " (reduce " + objetoEquipado.getModificador() + " de daño)";
+                    + " (reduce " + modDefensa + " de daño)";
         } else {
             mensaje = nombre + " esquiva el ataque.";
         }
