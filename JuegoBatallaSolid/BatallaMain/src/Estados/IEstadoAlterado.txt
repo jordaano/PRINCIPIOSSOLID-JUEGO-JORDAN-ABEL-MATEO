@@ -1,0 +1,12 @@
+package Estados;
+
+public interface IEstadoAlterado {
+
+    String getNombre();
+
+    boolean aplicar(personaje personaje);
+
+    void disminuirTurno();
+
+    boolean terminado();
+}

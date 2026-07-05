@@ -1,0 +1,30 @@
+package Estados;
+
+private boolean aplicarEfectoEstado(String estado) {
+
+    switch (estado.toLowerCase()) {
+
+        case "envenenado":
+            this.vida -= 8;
+            System.out.println("[EFECTO] " + nombre + " pierde 8 de vida por Veneno. (Vida actual: " + vida + ")");
+            return true;
+
+        case "quemado":
+            this.vida -= 5;
+            System.out.println("[EFECTO] " + nombre + " pierde 5 de vida por Quemadura. (Vida actual: " + vida + ")");
+            return true;
+
+        case "aturdido":
+            System.out.println("[EFECTO] " + nombre + " está ATURDIDO y pierde su oportunidad de atacar.");
+            return false;
+
+        case "regeneración":
+        case "regeneracion":
+            this.vida += 10;
+            System.out.println("[EFECTO] " + nombre + " recupera 10 de vida por Regeneración. (Vida actual: " + vida + ")");
+            return true;
+
+        default:
+            return true;
+    }
+}
